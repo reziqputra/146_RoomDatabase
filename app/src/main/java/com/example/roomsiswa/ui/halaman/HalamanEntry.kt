@@ -8,6 +8,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -50,18 +51,20 @@ fun EntrySiswaScreen(
             canNavigateBack = true,
             scrollBehavior = scrollBehavior
         )
-    }) {
-            innerPadding ->
+    }) { innerPadding ->
         EntrySiswaBody(
             uiStateSiswa = viewModel.uiStateSiswa,
             onSiswaValueChange = viewModel::updateUiState,
             onSaveClick = {
-                coroutineScope.launch { viewModel.saveSiswa()
-                    navigasiBack()}
+                coroutineScope.launch {
+                    viewModel.saveSiswa()
+                    navigasiBack()
+                }
             },
             modifier = Modifier
                 .padding(innerPadding)
-                .verticalScroll(rememberScrollState()).fillMaxWidth()
+                .verticalScroll(rememberScrollState())
+                .fillMaxWidth()
         )
     }
 }
@@ -137,6 +140,22 @@ fun FormInputSiswa(
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
             singleLine = true
+        )
+        if (enabled) {
+            Text(
+                text = stringResource(R.string.required_field), modifier = Modifier.padding(
+                    start = dimensionResource(
+                        id = R.dimen.padding_medium
+                    )
+                )
+            )
+        }
+        Divider(
+            thickness = dimensionResource(R.dimen.padding_small), modifier = Modifier.padding(
+                bottom = dimensionResource(
+                    R.dimen.padding_medium
+                )
+            )
         )
     }
 }
