@@ -104,15 +104,34 @@ fun DetailsScreen(
 private fun ItemDetailsBody(
     itemDetailsUiState: ItemDetailsUiState, onDelete: () -> Unit, modifier: Modifier = Modifier
 ){
-    var deleteConfirmationRequired by rememberSaveable { mutableStateOf(false) }
-    ItemDetails(siswa = itemDetailsUiState.detailSiswa.toSiswa(), modifier = Modifier.fillMaxWidth())
-    OutlinedButton(onClick = { deleteConfirmationRequired = true}, shape = MaterialTheme.shapes.small, modifier = Modifier.fillMaxWidth()) {
-        Text(stringResource(id = R.string.delete))
+    Column(
+        modifier = modifier.padding(dimensionResource(id = R.dimen.padding_medium)),
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_medium))
+    ) {
+        var deleteConfirmationRequired by rememberSaveable { mutableStateOf(false) }
+        ItemDetails(
+            siswa = itemDetailsUiState.detailSiswa.toSiswa(),
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        OutlinedButton(
+            onClick = { deleteConfirmationRequired = true },
+            shape = MaterialTheme.shapes.small,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(stringResource(R.string.delete))
+        }
+        if (deleteConfirmationRequired) {
+            DeleteConfirmationDialog(
+                onDeleteConfirm = {
+                    deleteConfirmationRequired = false
+                    onDelete()
+                },
+                onDeleteCancel = { deleteConfirmationRequired = false },
+                modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_medium))
+            )
+        }
     }
-    if (deleteConfirmationRequired){
-        DeleteConfirmationDialog(onDeleteConfirm = { deleteConfirmationRequired = false
-            onDelete()}, onDeleteCancel = {deleteConfirmationRequired = false}, modifier = Modifier.padding(
-            dimensionResource(id = R.dimen.padding_medium)))}
 }
 
 @Composable
